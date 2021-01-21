@@ -36,3 +36,13 @@ textarea {
 .sidebar h2 {
     margin-top: 5px;
 }
+
+a{
+    color: gray;
+    font-weight: 700;
+}
+
+a:hover{
+    text-decoration: none;
+    color: rgba(57, 57, 221, 1);
+}

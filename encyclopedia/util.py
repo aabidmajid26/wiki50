@@ -3,6 +3,11 @@ import re
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
+def list_entries_names():
+    _, filenames = default_storage.listdir("entries")
+    return list(filename
+                for filename in filenames if filename.endswith(".md"))
+
 
 def list_entries():
     """
