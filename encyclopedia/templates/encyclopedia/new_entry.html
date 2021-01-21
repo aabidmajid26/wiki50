@@ -1,0 +1,32 @@
+{% extends 'encyclopedia/layout.html' %}
+{% load static %}
+
+{% block title %} {{title}} {% endblock %}
+
+{% block body %}
+
+
+        <p><h2>Add an Article</h2></p><hr>
+        <form action="{% url 'new' %}" method="POST">
+            {% csrf_token %}
+            <div>
+                <span id="label">Author : </span></name><input autofocus required type="text" name="author">
+            </div><br>
+            <div>
+                <span id="label">Topic Name : </span><input required type="text" name="topic_name">
+            </div><br>
+            <div>
+                <span id="label">Body : </span><br>
+                    <textarea required name="body" id="" cols="30" rows="8"></textarea>
+            </div>
+            <div>
+                <input type="submit">
+            </div>
+
+
+
+        </form>
+
+
+
+{% endblock %}

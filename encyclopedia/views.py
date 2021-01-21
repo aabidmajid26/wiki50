@@ -1,8 +1,9 @@
 import markdown2
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from random import randint
+from django.urls import reverse
 
 
 from . import util
@@ -43,4 +44,18 @@ def random(request):
         z = all_entries[i]
         return open_entry(request, z)
     return HttpResponse(z)
-    
+
+def new_entry(request):
+    if request.method == 'POST':
+        filename = request.POST['topic_name'].split()[0]
+        if filename in util.list_entries(): 
+            return render(request, 'encyclopedia/notfound.html',{
+                "error" : "Sorry! This Page Already Exists!",
+                "title" : "Collision"
+        })
+        content = request.POST['body']
+        util.save_entry(filename, content)
+        return HttpResponseRedirect(reverse('open_entry',args=(filename,)))
+
+
+    return render(request, 'encyclopedia/new_entry.html')
