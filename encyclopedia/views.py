@@ -1,4 +1,5 @@
 import markdown2
+import re
 
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
@@ -11,7 +12,8 @@ from . import util
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()
+        "entries": util.list_entries(),
+        "title" : "Encyclopedia"
     })
 
 def open_entry(request,name):
@@ -59,3 +61,28 @@ def new_entry(request):
 
 
     return render(request, 'encyclopedia/new_entry.html')
+
+def search(request):
+    query = request.GET['q'].lower()
+    all_names = util.list_entries()
+    case_insens = [name.lower() for name in all_names]
+    if query in case_insens:
+        return open_entry(request, query)
+    search_results = []
+    for s in all_names:
+        sr = re.search(rf"{query}[0-9a-zA-Z]*",s, re.IGNORECASE)
+        if sr != None:
+            search_results.append((s,sr.start()))
+    search_results = list(sorted(search_results, key= lambda x : x[1]))
+    search_results = [sr[0] for sr in search_results]
+    if not len(search_results):
+        return render(request, "encyclopedia/notfound.html", {
+            "error" : "No Match Found for the Query! If you want to write an article about this; click on Create New Page",
+            "title" : "Try Again!"
+        })
+    return render(request, "encyclopedia/index.html", {
+        "entries" : search_results,
+        "title"   : "Search Results"
+    })
+
+    

@@ -43,6 +43,6 @@ a{
 }
 
 a:hover{
-    text-decoration: none;
+    text-decoration: underline;
     color: rgba(57, 57, 221, 1);
 }
